@@ -9,6 +9,8 @@ from log import Logger
 from imagefeatures.hsv import *
 
 logger = Logger(logname='log.txt', loglevel=1, logger="color.py").getlog()
+
+# 定义基于HSV颜色空间的5种量化方式
 COLOR_NUM = [36, 72, 20, 44, 76]
 HSVQUA = [HsvQua36, HsvQua72, HsvQua20, HsvQua44, HsvQuaTest]
 
@@ -82,13 +84,9 @@ def global_features(image_path, mode=3, mask=None):
     bins = COLOR_NUM[mode]
     hist = cv2.calcHist([qua_im], [0], mask, [bins], [0, bins])
     hist = cv2.normalize(hist).flatten()
-    # plt.plot(hist, color='r')
-    # plt.xlim([0, bins])
-    # plt.show()
     features = [float(x) for x in hist]
     logger.info("get image color features!")
     return features
-    # return qua_im
 
 
 # 获取中央区域和背景区域的特征向量
@@ -108,6 +106,7 @@ def get_merge_color(path):
     return features
 
 
+# 显示图像颜色特征直方图
 color_list = ['r', 'g', 'b']
 def show_features(image_folder, mode=3, mask=None):
     image_list = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if 'jpg' in f]
@@ -122,22 +121,10 @@ def show_features(image_folder, mode=3, mask=None):
         plt.xlim([0, bins])
         index += 1
     plt.show()
-        # features = [float(x) for x in hist]
-        # logger.info("get image color features!")
-    # return features
 
 
 if __name__ == "__main__":
     image_folder = r"D:\ICBC\test"
-    # image_path = r"D:\ICBC\test\2.jpg"
-    image_list = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if 'jpg' in f]
-    import time
-    start = time.clock()
-    for image_path in image_list:
-        features = global_features(image_path, 3)
-    end = time.clock()
-    print "read: %f s" % (end - start)
-    # for i in range(0, 4):
-    # features = global_features(image_path, 1)
-    # show_histogram(features, 1, col='r')
-    # print features, len(features), sum(features)
+    features = global_features(image_path, 3)
+
+
